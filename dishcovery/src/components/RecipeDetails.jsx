@@ -2,10 +2,12 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { RecipeContext } from '../context/RecipeContext.jsx';
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
+import { HeartIcon as HeartIconOutline } from '@heroicons/react/24/outline';
 
 function RecipeDetails() {
   const { id } = useParams();
-  const { addToShoppingList } = useContext(RecipeContext);
+  const { addToShoppingList, favorites, addToFavorites, removeFromFavorites } = useContext(RecipeContext);
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,41 +47,52 @@ function RecipeDetails() {
     }
   }
 
+  const isFavorite = favorites.some((fav) => fav.idMeal === recipe.idMeal);
+
   return (
     <div className="p-4 sm:p-8 bg-beige-100 dark:bg-gray-900">
-  <h2 className="text-3xl font-bold text-green-700 dark:text-green-300 mb-4">{recipe.strMeal}</h2>
-  <div className="flex flex-col md:flex-row gap-8">
-    <div className="md:w-1/2">
-      <img src={recipe.strMealThumb} alt={recipe.strMeal} className="w-full h-96 object-cover rounded-lg shadow-md" />
-    </div>
-    <div className="md:w-1/2">
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{recipe.strCategory} • {recipe.strArea}</p>
-      <p className="text-base text-gray-800 dark:text-gray-200 mb-4">{recipe.strInstructions.slice(0, 100)}...</p>
-      <div className="flex space-x-2 mb-4">
-        <button className="bg-orange-500 text-white rounded-lg px-4 py-2 hover:bg-orange-600">Ingredients</button>
-        <button className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600">
-          Instructions
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-3xl font-bold text-green-700 dark:text-green-300">{recipe.strMeal}</h2>
+        <button onClick={() => isFavorite ? removeFromFavorites(recipe.idMeal) : addToFavorites(recipe)}>
+          {isFavorite ? (
+            <HeartIconSolid className="h-8 w-8 text-red-500" />
+          ) : (
+            <HeartIconOutline className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+          )}
         </button>
       </div>
-      <ul className="space-y-2">
-        {ingredients.map((item, index) => (
-          <li key={index} className="flex items-center justify-between">
-            <div className="flex items-center">
-              <span className="text-green-700 dark:text-green-300 mr-2">✔</span>
-              <span className="text-gray-800 dark:text-gray-200">{item.measure} {item.ingredient}</span>
-            </div>
-            <button
-              onClick={() => addToShoppingList(item.ingredient, 1)}
-              className="text-orange-500 dark:text-orange-400 hover:underline"
-            >
-              Add to Shopping List
+      <div className="flex flex-col md:flex-row gap-8">
+        <div className="md:w-1/2">
+          <img src={recipe.strMealThumb} alt={recipe.strMeal} className="w-full h-96 object-cover rounded-lg shadow-md" loading="lazy" />
+        </div>
+        <div className="md:w-1/2">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{recipe.strCategory} • {recipe.strArea}</p>
+          <p className="text-base text-gray-800 dark:text-gray-200 mb-4">{recipe.strInstructions.slice(0, 100)}...</p>
+          <div className="flex space-x-2 mb-4">
+            <button className="bg-orange-500 text-white rounded-lg px-4 py-2 hover:bg-orange-600">Ingredients</button>
+            <button className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600">
+              Instructions
             </button>
-          </li>
-        ))}
-      </ul>
+          </div>
+          <ul className="space-y-2">
+            {ingredients.map((item, index) => (
+              <li key={index} className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <span className="text-green-700 dark:text-green-300 mr-2">✔</span>
+                  <span className="text-gray-800 dark:text-gray-200">{item.measure} {item.ingredient}</span>
+                </div>
+                <button
+                  onClick={() => addToShoppingList(item.ingredient, 1)}
+                  className="text-orange-500 dark:text-orange-400 hover:underline"
+                >
+                  Add to Shopping List
+                </button>
+              </li>
+            ))}
+          </ul>
           {recipe.strYoutube && (
             <div className="mt-4">
-              <h3 className="text-xl font-bold text-green-700">Watch Tutorial</h3>
+              <h3 className="text-xl font-bold text-green-700 dark:text-green-300">Watch Tutorial</h3>
               <iframe
                 width="100%"
                 height="315"
@@ -95,9 +108,8 @@ function RecipeDetails() {
               <a
                 href={recipe.strSource}
                 target="_blank"
-                rel="noopener noreferr
-er"
-                className="text-orange-500 hover:underline"
+                rel="noopener noreferrer"
+                className="text-orange-500 dark:text-orange-400 hover:underline"
               >
                 View Full Recipe on TheMealDB
               </a>
