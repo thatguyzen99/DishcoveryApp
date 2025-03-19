@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
+// src/components/RecipeDetails.jsx
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import { RecipeContext } from '../context/RecipeContext.jsx';
 
 function RecipeDetails() {
   const { id } = useParams();
+  const { addToShoppingList } = useContext(RecipeContext);
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,6 +14,9 @@ function RecipeDetails() {
     const fetchRecipe = async () => {
       try {
         const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
         const data = await response.json();
         if (data.meals) {
           setRecipe(data.meals[0]);
@@ -30,42 +36,47 @@ function RecipeDetails() {
   if (error) return <p className="text-center text-red-500">{error}</p>;
   if (!recipe) return null;
 
-  // Extract ingredients
   const ingredients = [];
   for (let i = 1; i <= 20; i++) {
     const ingredient = recipe[`strIngredient${i}`];
     const measure = recipe[`strMeasure${i}`];
     if (ingredient && ingredient.trim()) {
-      ingredients.push(`${measure} ${ingredient}`);
+      ingredients.push({ ingredient, measure });
     }
   }
 
   return (
-    <div className="p-8">
-      <h2 className="text-3xl font-bold text-green-700 mb-4">{recipe.strMeal}</h2>
-      <div className="flex flex-col md:flex-row gap-8">
-        <div className="md:w-1/2">
-          <img
-            src={recipe.strMealThumb}
-            alt={recipe.strMeal}
-            className="w-full h-96 object-cover rounded-lg"
-          />
-        </div>
-        <div className="md:w-1/2">
-          <p className="text-sm text-gray-600 mb-2">{recipe.strCategory} • {recipe.strArea}</p>
-          <p className="text-base text-gray-800 mb-4">{recipe.strInstructions.slice(0, 100)}...</p>
-          <div className="flex space-x-2 mb-4">
-            <button className="bg-orange-500 text-white rounded-lg px-4 py-2">Ingredients</button>
-            <button className="bg-gray-200 text-gray-800 rounded-lg px-4 py-2">Instructions</button>
-          </div>
-          <ul className="space-y-2">
-            {ingredients.map((item, index) => (
-              <li key={index} className="flex items-center">
-                <span className="text-green-700 mr-2">✔</span>
-                <span className="text-gray-800">{item}</span>
-              </li>
-            ))}
-          </ul>
+    <div className="p-4 sm:p-8 bg-beige-100 dark:bg-gray-900">
+  <h2 className="text-3xl font-bold text-green-700 dark:text-green-300 mb-4">{recipe.strMeal}</h2>
+  <div className="flex flex-col md:flex-row gap-8">
+    <div className="md:w-1/2">
+      <img src={recipe.strMealThumb} alt={recipe.strMeal} className="w-full h-96 object-cover rounded-lg shadow-md" />
+    </div>
+    <div className="md:w-1/2">
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{recipe.strCategory} • {recipe.strArea}</p>
+      <p className="text-base text-gray-800 dark:text-gray-200 mb-4">{recipe.strInstructions.slice(0, 100)}...</p>
+      <div className="flex space-x-2 mb-4">
+        <button className="bg-orange-500 text-white rounded-lg px-4 py-2 hover:bg-orange-600">Ingredients</button>
+        <button className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600">
+          Instructions
+        </button>
+      </div>
+      <ul className="space-y-2">
+        {ingredients.map((item, index) => (
+          <li key={index} className="flex items-center justify-between">
+            <div className="flex items-center">
+              <span className="text-green-700 dark:text-green-300 mr-2">✔</span>
+              <span className="text-gray-800 dark:text-gray-200">{item.measure} {item.ingredient}</span>
+            </div>
+            <button
+              onClick={() => addToShoppingList(item.ingredient, 1)}
+              className="text-orange-500 dark:text-orange-400 hover:underline"
+            >
+              Add to Shopping List
+            </button>
+          </li>
+        ))}
+      </ul>
           {recipe.strYoutube && (
             <div className="mt-4">
               <h3 className="text-xl font-bold text-green-700">Watch Tutorial</h3>
@@ -77,6 +88,19 @@ function RecipeDetails() {
                 frameBorder="0"
                 allowFullScreen
               ></iframe>
+            </div>
+          )}
+          {recipe.strSource && (
+            <div className="mt-4">
+              <a
+                href={recipe.strSource}
+                target="_blank"
+                rel="noopener noreferr
+er"
+                className="text-orange-500 hover:underline"
+              >
+                View Full Recipe on TheMealDB
+              </a>
             </div>
           )}
         </div>

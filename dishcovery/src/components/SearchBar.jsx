@@ -19,7 +19,7 @@ function SearchBar({ onSearch }) {
         onChange={(e) => setQuery(e.target.value)}
         className="border-2 border-gray-600 rounded-lg p-3 w-96 text-gray-800"
       />
-      <button type="submit" className="bg-orange-500 text-white font-bold py-3 px-6 rounded-lg ml-2 hover:bg-orange-600">
+      <button type="submit" className="bg-orange-500 text-white font-bold py-3 px-6 rounded-lg ml-2 hover:bg-orange-600 hover:scale-105 transition-transform duration-200">
         Find Recipes
       </button>
     </form>
