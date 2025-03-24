@@ -1,4 +1,3 @@
-// src/components/FilterBar.jsx
 import { useContext } from 'react';
 import { RecipeContext } from '../context/RecipeContext.jsx';
 

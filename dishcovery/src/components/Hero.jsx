@@ -1,4 +1,4 @@
-import backgroundImage from '../asset/images/background.jpg';
+import backgroundImage from '../assets/Images/background.png';
 
 function Hero() {
   return (
@@ -8,8 +8,12 @@ function Hero() {
         style={{ backgroundImage: `url(${backgroundImage})` }}
       ></div>
       <div className="text-center space-y-4 z-10">
-        <h1 className="text-4xl font-bold text-green-700">Discover Delicious Recipes</h1>
-        <p className="text-lg text-gray-600">Find meals that match your pantry.</p>
+        <h1 className="text-4xl font-bold text-green-700">
+          Discover Delicious Recipes
+        </h1>
+        <p className="text-lg text-gray-600">
+          Find meals that match your pantry.
+        </p>
         <button className="bg-orange-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-orange-600 hover:scale-105 transition-transform duration-200">
           Start Cooking Now
         </button>

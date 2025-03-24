@@ -1,4 +1,3 @@
-// src/components/Alert.jsx
 function Alert({ message, type = 'error' }) {
   return (
     <div
