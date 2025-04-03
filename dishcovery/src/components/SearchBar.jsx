@@ -12,7 +12,7 @@ function SearchBar({ onSearch }) {
 
   const handleClear = () => {
     setQuery('');
-    onSearch(''); // Notify parent component of clear action
+    onSearch(''); 
   };
 
   return (

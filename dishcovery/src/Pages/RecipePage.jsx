@@ -6,7 +6,7 @@ function RecipePage() {
     <div>
       <Navbar />
       <main aria-label="Recipe Details">
-        <h1 className="sr-only">Recipe Details</h1> {/* Added for screen readers */}
+        <h1 className="sr-only">Recipe Details</h1> 
         <RecipeDetails />
       </main>
     </div>

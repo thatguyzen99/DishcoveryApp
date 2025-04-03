@@ -1,9 +1,8 @@
-// src/context/RecipeContext.jsx (Final Version with searchRecipes restored)
 import { createContext, useState, useEffect, useCallback } from 'react';
 
 export const RecipeContext = createContext();
 
-// Helper function to get initial state from localStorage safely
+
 const getInitialState = (key, defaultValue) => {
     try {
         const item = localStorage.getItem(key);
@@ -16,17 +15,17 @@ const getInitialState = (key, defaultValue) => {
 
 
 export function RecipeProvider({ children }) {
-  // State declarations
+  
   const [recipes, setRecipes] = useState([]);
   const [favorites, setFavorites] = useState(() => getInitialState('favorites', []));
   const [shoppingList, setShoppingList] = useState(() => getInitialState('shoppingList', []));
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('Breakfast'); // Default filter example
+  const [filter, setFilter] = useState('Breakfast'); 
   const [pantryIngredients, setPantryIngredients] = useState(() => getInitialState('pantryIngredients', []));
 
-  // Persistence Effects
+
   useEffect(() => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
@@ -38,9 +37,7 @@ export function RecipeProvider({ children }) {
   useEffect(() => {
     localStorage.setItem('pantryIngredients', JSON.stringify(pantryIngredients));
   }, [pantryIngredients]);
-  // --- End Persistence Effects ---
-
-  // --- API Fetching Functions ---
+  
   const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch(
@@ -53,7 +50,7 @@ export function RecipeProvider({ children }) {
       setCategories(data.categories || []);
     } catch (err) {
       console.error('Failed to fetch categories:', err);
-      // setError('Failed to fetch categories.'); // Optional: Decide if critical
+      
     }
   }, []);
 
@@ -62,8 +59,8 @@ export function RecipeProvider({ children }) {
   }, [fetchCategories]);
 
   const searchRecipes = useCallback(async (query) => {
-    // --- Implementation restored ---
-    if (!query || query.trim() === '') { // Check for empty or whitespace-only query
+    
+    if (!query || query.trim() === '') { 
         setRecipes([]);
         setError(null);
         setLoading(false);
@@ -73,7 +70,7 @@ export function RecipeProvider({ children }) {
     setError(null);
     try {
         const response = await fetch(
-            `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(query)}` // Use encodeURIComponent
+            `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(query)}` 
         );
         if (!response.ok) {
             throw new Error('Failed to fetch recipes (Network response not ok).');
@@ -83,24 +80,24 @@ export function RecipeProvider({ children }) {
             setRecipes(data.meals);
         } else {
             setRecipes([]);
-            // setError(`No recipes found for "${query}".`); // Optionally set error for no results
+           
         }
     } catch (err) {
          console.error("Search recipes error:", err);
         setError('Failed to fetch recipes. Please check your connection or try again.');
-        setRecipes([]); // Clear recipes on error
-    } finally {
+        setRecipes([]); 
+
         setLoading(false);
     }
-    // --- End of implementation ---
-  }, []); // Dependencies should be empty
+
+  }, []); 
 
   const fetchRecipesByCategory = useCallback(async (category) => {
     setLoading(true);
     setError(null);
     try {
       const response = await fetch(
-        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${encodeURIComponent(category)}` // Use encodeURIComponent
+        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${encodeURIComponent(category)}` 
       );
       if (!response.ok) {
         throw new Error('Failed to fetch recipes.');
@@ -110,20 +107,19 @@ export function RecipeProvider({ children }) {
         setRecipes(data.meals);
       } else {
         setRecipes([]);
-        // setError(`No recipes found for category: ${category}`);
+        
       }
     } catch (err) {
       console.error("Fetch by category error:", err);
       setError('Failed to fetch recipes. Please check your connection or try again.');
-       setRecipes([]); // Clear recipes on error
+       setRecipes([]); 
     } finally {
       setLoading(false);
     }
   }, []);
-  // --- End API Fetching Functions ---
+  
 
 
-  // --- Favorite Functions ---
   const addToFavorites = useCallback((recipe) => {
     setFavorites((prev) => {
         if (!prev.some((fav) => fav.idMeal === recipe.idMeal)) {
@@ -136,14 +132,11 @@ export function RecipeProvider({ children }) {
   const removeFromFavorites = useCallback((id) => {
     setFavorites((prev) => prev.filter((fav) => fav.idMeal !== id));
   }, []);
-  // --- End Favorite Functions ---
-
-
-  // --- Shopping List Functions ---
+  
   const addToShoppingList = useCallback((ingredient, quantity = 1) => {
     setShoppingList((prev) => {
       const ingredientLower = ingredient.trim().toLowerCase();
-      if (!ingredientLower) return prev; // Don't add empty ingredients
+      if (!ingredientLower) return prev; 
       const existing = prev.find((item) => item.ingredient.toLowerCase() === ingredientLower);
       if (existing) {
         return prev.map((item) =>
@@ -157,7 +150,7 @@ export function RecipeProvider({ children }) {
   }, []);
 
   const updateShoppingListQuantity = useCallback((ingredient, quantity) => {
-     const newQuantity = Math.max(1, quantity); // Prevent quantity below 1
+     const newQuantity = Math.max(1, quantity); 
     setShoppingList((prev) =>
       prev.map((item) =>
         item.ingredient.toLowerCase() === ingredient.toLowerCase()
@@ -170,10 +163,8 @@ export function RecipeProvider({ children }) {
   const removeFromShoppingList = useCallback((ingredient) => {
     setShoppingList((prev) => prev.filter((item) => item.ingredient.toLowerCase() !== ingredient.toLowerCase()));
   }, []);
-  // --- End Shopping List Functions ---
+  
 
-
-  // --- Pantry Functions ---
   const addPantryIngredient = useCallback((ingredientData) => {
     setPantryIngredients((prev) => {
         const newItem = {
@@ -202,13 +193,10 @@ export function RecipeProvider({ children }) {
    const getRecipeIdeas = useCallback(async () => {
        console.log("Getting recipe ideas based on:", pantryIngredients);
        alert("Recipe Ideas feature is not implemented yet.");
-       // TODO: Implement real logic using external API or other methods
+       // TODO: This i will Implement real logic using external API or other methods
        return [];
    }, [pantryIngredients]);
-  // --- End Pantry Functions ---
-
-
-  // Value provided by the context
+ 
   const value = {
     recipes,
     setRecipes,
@@ -223,7 +211,7 @@ export function RecipeProvider({ children }) {
     fetchRecipesByCategory,
     loading,
     error,
-    searchRecipes, // Now has implementation
+    searchRecipes, 
     filter,
     setFilter,
     pantryIngredients,

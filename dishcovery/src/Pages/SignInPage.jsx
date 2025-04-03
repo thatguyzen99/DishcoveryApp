@@ -9,9 +9,9 @@ function SignInPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log({ email, password });
-    // In a real app, you'd send this data to your backend for authentication.
-    // After successful sign-in, you'd typically navigate to another page.
-    navigate('/'); // Navigate to the home page (root path)
+    // In a real app, I'll send this data to my backend for authentication.
+    // After successful sign-in, I'll typically navigate to another page.
+    navigate('/'); 
   };
 
   return (

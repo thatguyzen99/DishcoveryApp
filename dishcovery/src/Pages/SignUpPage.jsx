@@ -2,18 +2,17 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 function SignUpPage() {
-  const [name, setName] = useState(''); // Added name field
+  const [name, setName] = useState(''); 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState(''); // Added confirm password
-  const [error, setError] = useState(''); // Basic error handling
+  const [confirmPassword, setConfirmPassword] = useState(''); 
+  const [error, setError] = useState(''); 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
+    setError(''); 
 
-    // Basic Validation
     if (!name || !email || !password || !confirmPassword) {
       setError('Please fill in all fields.');
       return;
@@ -24,15 +23,13 @@ function SignUpPage() {
     }
 
     // --- Backend Integration Needed ---
-    // In a real app, you would send name, email, password
-    // to your backend API endpoint for user registration here.
-    // Handle success (e.g., auto-login, redirect) or errors from the API.
+    // In a real app, I would send name, email, password
+    // to my backend API endpoint for user registration here.
+  
     console.log('Submitting registration:', { name, email, password });
-    // --- End of Placeholder ---
-
-    // On success (placeholder):
-    alert('Sign up successful! Please sign in.'); // Replace with actual success logic
-    navigate('/signin'); // Navigate to the sign-in page after simulated success
+   
+    alert('Sign up successful! Please sign in.'); 
+    navigate('/signin'); 
   };
 
   return (
@@ -41,9 +38,9 @@ function SignUpPage() {
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">
           Sign Up
         </h1>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>} {/* Display errors */}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>} 
         <form aria-label="Sign up form" onSubmit={handleSubmit}>
-          {/* Name Field */}
+          
           <div className="mb-4">
             <label
               htmlFor="name"
@@ -62,7 +59,7 @@ function SignUpPage() {
             />
           </div>
 
-          {/* Email Field */}
+          
           <div className="mb-4">
             <label
               htmlFor="email"
@@ -81,7 +78,7 @@ function SignUpPage() {
             />
           </div>
 
-          {/* Password Field */}
+          
           <div className="mb-4">
             <label
               htmlFor="password"
@@ -100,7 +97,7 @@ function SignUpPage() {
             />
           </div>
 
-          {/* Confirm Password Field */}
+          
           <div className="mb-6">
             <label
               htmlFor="confirmPassword"
@@ -119,7 +116,7 @@ function SignUpPage() {
             />
           </div>
 
-          {/* Submit Button and Link */}
+          
           <div className="flex items-center justify-between">
             <button
               className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -128,7 +125,7 @@ function SignUpPage() {
               Sign Up
             </button>
             <Link
-              to="/signin" // Link back to Sign In
+              to="/signin" 
               className="inline-block align-baseline font-bold text-sm text-orange-500 hover:text-orange-800"
             >
               Already have an account? Sign In
