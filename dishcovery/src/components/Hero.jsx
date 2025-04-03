@@ -12,9 +12,7 @@ function Hero() {
         <h1 className="text-4xl font-bold text-green-700">
           Discover Delicious Recipes
         </h1>
-        <p className="text-lg text-gray-600">
-          Find meals that match your pantry.
-        </p>
+
         <Link
           to="/Pages/RecipePage" // Correct path to RecipePage.jsx
           aria-label="Start exploring recipes"

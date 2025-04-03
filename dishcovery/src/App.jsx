@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
 import { RecipeProvider } from '@/context/RecipeContext.jsx';
-import Home from '@/pages/Home.jsx';
-import RecipePage from '@/pages/RecipePage.jsx';
-import Favorites from '@/pages/Favorites.jsx';
-import ShoppingList from '@/pages/ShoppingList.jsx';
-import SignInPage from '@/pages/SignInPage.jsx';
+import Home from '@/Pages/Home.jsx';
+import RecipePage from '@/Pages/RecipePage.jsx';
+import Favorites from '@/Pages/Favorites.jsx';
+import ShoppingList from '@/Pages/ShoppingList.jsx';
+import SignInPage from '@/Pages/SignInPage.jsx';
 
 function App() {
   return (
